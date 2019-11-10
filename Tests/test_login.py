@@ -4,16 +4,14 @@ import sys
 import os
 import pytest
 from time import sleep
-
 from faker import Faker
 from selenium import webdriver
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/../')
 from Pages.loginPage import LoginPage
 from Pages.createAccountPage import CreateAccountPage
 from Pages.forgotPasswordPage import ForgotPasswordPage
 from Pages.loggedOutHomePage import LoggedOutHomePage
-
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + '/../')
 
 
 class TestTeachableExam:
@@ -22,7 +20,7 @@ class TestTeachableExam:
 
     @pytest.fixture()
     def test_setup(self):
-        self.driver = webdriver.Chrome("/Users/hharsh/chromedriver")
+        self.driver = webdriver.Chrome("../Tests/chromedriver")
         yield
         self.driver.close()
 
