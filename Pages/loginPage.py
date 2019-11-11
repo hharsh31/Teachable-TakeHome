@@ -47,3 +47,7 @@ class LoginPage:
             EC.presence_of_element_located((By.XPATH, self.create_account_xpath))
         )
         element.click()
+
+    def get_url(self):
+        url = self. driver.current_url
+        return url

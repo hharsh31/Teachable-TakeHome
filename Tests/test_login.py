@@ -6,12 +6,14 @@ import pytest
 from time import sleep
 from faker import Faker
 from selenium import webdriver
+
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 from Pages.loginPage import LoginPage
 from Pages.createAccountPage import CreateAccountPage
 from Pages.forgotPasswordPage import ForgotPasswordPage
 from Pages.loggedOutHomePage import LoggedOutHomePage
+from Pages.homePage import LoggedInHomePage
 
 
 class TestTeachableExam:
@@ -163,4 +165,51 @@ class TestTeachableExam:
         account.click_signup()
         assert driver.page_source.__contains__("All Courses")
         assert driver.page_source.__contains__("My Courses")
+
+    def test_logout(self, test_setup):
+        driver = self.driver
+
+        driver.get("https://takehome.zeachable.com/")
+        assert driver.title == "Homepage | takehome"
+
+        loggedouthome = LoggedOutHomePage(driver)
+        loggedouthome.click_login()
+
+        login = LoginPage(driver)
+        login.enter_username("takehome@test.com")
+        login.enter_password("Teachable")
+        login.click_login()
+
+        loggedin = LoggedInHomePage(driver)
+        loggedin.click_login_avatar("takehome@test.com")
+        loggedin.click_logout()
+        assert driver.title == "Homepage | takehome"
+
+    def test_verify_logged_in_url(self, test_setup):
+        driver = self.driver
+
+        driver.get("https://takehome.zeachable.com/")
+        assert driver.title == "Homepage | takehome"
+
+        loggedouthome = LoggedOutHomePage(driver)
+        loggedouthome.click_login()
+
+        login = LoginPage(driver)
+        login.enter_username("takehome@test.com")
+        login.enter_password("Teachable")
+        login.click_login()
+        url = login.get_url()
+
+        loggedin = LoggedInHomePage(driver)
+        loggedin.click_login_avatar("takehome@test.com")
+        loggedin.click_logout()
+
+        driver.get(url)
+        assert driver.title != "takehome"
+
+
+
+
+
+
 
