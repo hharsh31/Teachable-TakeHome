@@ -14,13 +14,22 @@
 - Install pytest using pip: pip3 install -U pytest
 - Install Faker using pip: pip3 install Faker
 - Install HTML-reports using pip: pip3 install pytest-html
+- Install pytest distributed testing plugin using pip: pip3 install pytest-xdist
 
 ## Running Tests on your Local Machine
 
-cd into Tests directory : cd ~/Teachable-TakeHome/Tests
-Run command : pytest test_login.py --html=report.html
+### Example: 
 
-Example: 
-2019-11-11 13:09:51 ⌚  Harshs-Air in ~/Teachable-TakeHome/Tests
+- For sequential run:
+
+```sh
 ± |master S:1 U:4 ?:6 ✗| → pytest test_login.py --html=report.html
+```
+
+- For parallel run:
+
+```sh
+± |master S:1 U:4 ?:6 ✗| → pytest -n 4 test_login.py
+```
+-n <num> runs the tests by using multiple workers, here it is 4.
 
