@@ -18,11 +18,13 @@ from Pages.homePage import LoggedInHomePage
 
 class TestTeachableExam:
 
-    faker = Faker()
-
-    @pytest.fixture()
-    def test_setup(self):
-        self.driver = webdriver.Chrome("../Tests/chromedriver")
+    @pytest.fixture(params=["chrome", "firefox"])
+    def test_setup(self, request):
+        self.faker = Faker()
+        if request.param == "chrome":
+            self.driver = webdriver.Chrome("../Tests/chromedriver")
+        if request.param == "firefox":
+            self.driver = webdriver.Firefox(executable_path='../Tests/geckodriver')
         yield
         self.driver.close()
 
@@ -141,8 +143,11 @@ class TestTeachableExam:
         assert driver.page_source.__contains__("You will receive an email with instructions on how to "
                                                "reset your password in a few minutes.")
 
-    def test_create_account(self, test_setup, fullname=faker.name(), email_address=faker.email()):
+    def test_create_account(self, test_setup):
         driver = self.driver
+
+        fullname = self.faker.name()
+        email_address = self.faker.email()
 
         driver.get("https://takehome.zeachable.com/")
         assert driver.title == "Homepage | takehome"
@@ -206,10 +211,3 @@ class TestTeachableExam:
 
         driver.get(url)
         assert driver.title != "takehome"
-
-
-
-
-
-
-
